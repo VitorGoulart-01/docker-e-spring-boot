@@ -1,6 +1,7 @@
 package com.javaspringatt.atividadebancodedados.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +17,11 @@ public class AttBancoService {
 
     public List<AttBancoModel> listarTodos(){
         return attBancoRepository.findAll();
+
     }
 
     public AttBancoModel BuscarPorId(int id){
+
         Optional<AttBancoModel> produto = attBancoRepository.findById(id);
         return produto.orElse(null);
     }
