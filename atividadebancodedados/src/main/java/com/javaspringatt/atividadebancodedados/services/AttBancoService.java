@@ -15,12 +15,12 @@ public class AttBancoService {
     @Autowired
     private AttBancoRepository attBancoRepository;
 
-    public List<AttBancoModel> listarTodos(){
+    public  List<AttBancoModel> listarTodos(){
         return attBancoRepository.findAll();
 
     }
 
-    public AttBancoModel BuscarPorId(int id){
+    public  AttBancoModel buscarPorId(int id){
 
         Optional<AttBancoModel> produto = attBancoRepository.findById(id);
         return produto.orElse(null);
@@ -28,6 +28,33 @@ public class AttBancoService {
 
     public AttBancoModel adicionarProduto(AttBancoModel produto){
         return attBancoRepository.save(produto);
+    }               
+
+    public AttBancoModel atualizarProduto(int id, AttBancoModel produtoAtualizado){
+        Optional<AttBancoModel> produtoExiste = attBancoRepository.findById(id);
+        if(produtoExiste.isPresent()){
+            AttBancoModel produto = produtoExiste.get();
+            produto.setNome(produtoAtualizado.getNome());
+            produto.setPreco(produtoAtualizado.getPreco());
+            return attBancoRepository.save(produto);
+        }
+        return null;
+    }
+
+    public void deletarProduto(int id){
+        attBancoRepository.deleteById(id);
+
+    }
+
+    public double calcularValorTotal(){
+        List<AttBancoModel> produto = attBancoRepository.findAll();
+        double total = 0;
+        for(AttBancoModel b : produto){
+            total += b.getPreco();
+
+        }
+        return total;
+
     }
 
 

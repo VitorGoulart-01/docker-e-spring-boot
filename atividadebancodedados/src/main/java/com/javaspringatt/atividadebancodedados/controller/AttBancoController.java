@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PutMapping;
 
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -22,18 +22,22 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/produtos")
-public class AttBancoController /*~~(Could not parse as Java)~~>*/{
+public class AttBancoController {
 
+    @Autowired
+    private AttBancoService attBancoService;
+
+ 
     
     @GetMapping
-    public ResponseEntity<AttBancoModel> listarTodos(){
-        List<AttBancoModel> produtos = AttBancoService.listarTodos();
+    public ResponseEntity<List<AttBancoModel>> listarTodos(){
+        List<AttBancoModel> produtos = attBancoService.listarTodos();
         return ResponseEntity.ok(produtos);
     }
     
     @GetMapping("/{id}")
     public ResponseEntity<AttBancoModel> buscarPorid(@PathVariable int id){
-        AttBancoModel produto = AttBancoService.buscarPorId(id);
+        AttBancoModel produto = attBancoService.buscarPorId(id);
         if(produto != null){
             return ResponseEntity.ok(produto);
         }
@@ -42,7 +46,7 @@ public class AttBancoController /*~~(Could not parse as Java)~~>*/{
     }
     @PostMapping
     public ResponseEntity<AttBancoModel> adicionarProduto(@RequestBody AttBancoModel produto){
-        AttBancoModel produtoSalvo = AttBancoService.adicionarProduto(produto);
+        AttBancoModel produtoSalvo = attBancoService.adicionarProduto(produto);
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoSalvo);
 
 
@@ -52,7 +56,7 @@ public class AttBancoController /*~~(Could not parse as Java)~~>*/{
     @PutMapping("/{id}")
     public ResponseEntity<AttBancoModel> atualizarProduto(@PathVariable int id, @RequestBody AttBancoModel produto){
 
-        AttBancoModel produtoAtualizar = AttBancoService.atualizarProduto(id, produto);
+        AttBancoModel produtoAtualizar = attBancoService.atualizarProduto(id, produto);
         if(produtoAtualizar != null){
             return ResponseEntity.ok(produtoAtualizar);
         }
@@ -62,9 +66,9 @@ public class AttBancoController /*~~(Could not parse as Java)~~>*/{
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarPorduto(@PathVariable int id){
-        AttBancoModel produto = AttBancoService.buscarPorId(id);
+        AttBancoModel produto = attBancoService.buscarPorId(id);
         if(produto != null){
-            AttBancoService.deletarProduto(id);
+            attBancoService.deletarProduto(id);
             return ResponseEntity.noContent().build();
         }
 
@@ -73,7 +77,7 @@ public class AttBancoController /*~~(Could not parse as Java)~~>*/{
 
     @GetMapping("/total")
     public ResponseEntity<Double> calcularTotal(){
-        double total = AttBancoService.calcularValorTotal();
+        double total = attBancoService.calcularValorTotal();
         return ResponseEntity.ok(total);
     }
 
